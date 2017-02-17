@@ -1,3 +1,4 @@
+# These are all going to fail mostly because the API key isn't included. :p
 import pytest
 from servomodules.ircformatting import changecolor, changestyle
 

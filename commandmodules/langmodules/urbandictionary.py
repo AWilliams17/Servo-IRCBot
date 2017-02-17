@@ -15,7 +15,7 @@ def defineword(word):
 
     try:
         definition = data['list'][0]['definition']
-    except IndexError:
+    except (IndexError, requests.ConnectionError):
         return changecolor("Failed to grab definition.", "red")
     except TypeError:
         return changecolor("Word must be a valid string.", "red")

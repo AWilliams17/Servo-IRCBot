@@ -1,4 +1,5 @@
 # ToDo: Allow for the mixing of formats and colors(EG: A bold and red string).
+# ToDo: Fix broken multi-line formatting/coloring
 """
 This module contains functions which take a string, and then either changes the color of the string, or the format
 of the string, and returns the result.

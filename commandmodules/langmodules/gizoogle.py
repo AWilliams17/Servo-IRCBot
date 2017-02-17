@@ -15,7 +15,7 @@ def gizoogle(text):
     html = requests.post(URL, data={'translatetext': text}).text
     try:
         gizoogledtext = str(BeautifulSoup(html, "html5lib").textarea.contents[0].strip())
-    except AttributeError:
+    except (AttributeError, requests.ConnectionError):
         return changecolor("Failed to grab gizoogled text.", "red")
     except TypeError:
         return changecolor("Word must be a valid string.", "red")

@@ -15,10 +15,10 @@ from commandmodules.langmodules import gizoogle, urbandictionary
 commandhandler = CommandHandler()
 current_date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 servo_path = getcwd().split("/bin")[0]
-servo_logs = servo_path + "/logs"
-if path.exists(servo_logs)is False:
-    makedirs(servo_logs)
-logging.basicConfig(filename=servo_logs + "/servo %s.log" % current_date, level=logging.DEBUG)
+servo_logs_path = servo_path + "/logs"
+if not path.exists(servo_logs_path):
+    makedirs(servo_logs_path)
+logging.basicConfig(filename=servo_logs_path + "/servo %s.log" % current_date, level=logging.DEBUG)
 
 
 @commandhandler.registercommand("!playerstats", "grabs a players stats")

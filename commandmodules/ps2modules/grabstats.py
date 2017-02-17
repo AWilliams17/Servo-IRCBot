@@ -31,5 +31,5 @@ def grabplayerstats(playername):
         return "Got stats for %s - battlerank: %s, faction: %s, certcount: %s, kills: %s, deaths: %s, KD: %s" % \
                (changestyle(playername, "bold"), charbr, charfaction, charcerts,
                 charkills, chardeaths, charkd)
-    except (IndexError, ZeroDivisionError, KeyError):
+    except (IndexError, ZeroDivisionError, KeyError, requests.ConnectionError):
         return changecolor("Could not retrieve player information.", "red")

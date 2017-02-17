@@ -38,20 +38,21 @@ def grabcontinentinfo(servername):
 
         for continent_name, continent_values in continentids_dict.items():
             continentdata = requests.get(
-                "http://census.daybreakgames.com/s: /get/ps2:v2/map/?world_id=" + serverid + "&zone_ids=" + str(
-                        continent_values[0])).json()
+                "http://census.daybreakgames.com/s: /get/ps2:v2/map/?world_id=" + serverid + "&zone_ids=" +
+                str(continent_values[0])).json()
             continentmap = continentdata['map_list'][0]
-            if continentmap['Regions']['Row'][continent_values[1]]['RowData']['FactionId'] != \
-                    continentmap['Regions']['Row'][continent_values[2]]['RowData']['FactionId']:
+            warpgate1_controlling_faction = continentmap['Regions']['Row'][continent_values[1]]['RowData']['FactionId']
+            warpgate2_controlling_faction = continentmap['Regions']['Row'][continent_values[2]]['RowData']['FactionId']
+            if warpgate1_controlling_faction != warpgate2_controlling_faction:
                 continent_statuses.append("%s is unlocked" % changestyle(continent_name, "bold"))
             else:
                 continent_statuses.append("%s was locked by the %s" %
-                                          (changestyle(continent_name, "bold"), factionids_dict.get(
-                                              int(continentmap['Regions']['Row'][0]['RowData']['FactionId']))))
+                                          (changestyle(continent_name, "bold"),
+                                           factionids_dict.get(int(warpgate1_controlling_faction))))
         continent_statuses.insert(3, "and")
         return ', '.join(continent_statuses).replace("and,", "and")
 
     try:
         return "On %s: %s." % (changestyle(server, "bold"), continentstatuses())
-    except KeyError:
+    except (KeyError, requests.ConnectionError):
         return changecolor("Could not retrieve continent information.", "red")
