@@ -9,11 +9,13 @@ color_codes = {
     "green": "03", "red": "04", "brown": "05",
     "purple": "06", "orange": "07", "yellow": "08",
     "lightgreen": "09", "teal": "10", "grey": "12",
-    "pink": "13"}
+    "pink": "13"
+}
 
 style_codes = {
     "bold": "\x02", "italic": "\x1D",
-    "underlined": "\x1F"}
+    "underlined": "\x1F"
+}
 
 
 def changestyle(string, style):

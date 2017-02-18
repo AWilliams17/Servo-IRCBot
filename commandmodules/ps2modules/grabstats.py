@@ -4,6 +4,7 @@ from __future__ import division
 from servomodules.ircformatting import changestyle, changecolor
 import requests
 
+
 def grabplayerstats(playername):
     """
     Attempt to grab a specified player's battlerank, faction, certs, kill/death count and KDR.
