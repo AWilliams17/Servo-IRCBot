@@ -64,9 +64,9 @@ class CommandHandler(object):
             linked_function = self.registeredcommands.get(str(link_list.pop(0)).lower())[0]
             if linked_function:
                 args = len(getargspec(linked_function).args)
-                if len(link_list) < args:
+                if len(link_list) < args and arg_type is not "optional":
                     return "Too few parameters (%s given, %s needed)" % (len(link_list), args)
-                elif len(link_list) > args and arg_type is not "multi string" and arg_type is "default":
+                elif len(link_list) > args and arg_type is not "multi string":
                     return "Too many parameters (%s given, %s needed)" % (len(link_list), args)
                 else:
                     if args is 0:

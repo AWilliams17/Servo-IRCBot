@@ -41,6 +41,17 @@ def urbandefine(word):
     return urbandictionary.defineword(word)
 
 
+@commandhandler.registercommand("!help", "Returns a list of registered commands/specified command description", "optional")
+def helpcmd(cmdstring=""):
+    if cmdstring is "":
+        return "Usage: !help (command) - Registered commands: %s" % ', '.join(commandhandler.registeredcommands.keys())
+    else:
+        try:
+            return "%s: %s" % (cmdstring, commandhandler.registeredcommands.get(cmdstring)[1])
+        except TypeError:
+            return "Failed to retrieve definition for command: %s" % cmdstring
+
+
 class Servo(irc.IRCClient):
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
