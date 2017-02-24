@@ -5,7 +5,7 @@ import requests
 from servomodules.ircformatting import changestyle, changecolor
 
 
-def grabcontinentinfo(servername):
+def grabcontinentinfo(servername, apikey):
     """
     Attempt to grab information pertaining to which faction has locked which continents on a given server.
 
@@ -44,7 +44,7 @@ def grabcontinentinfo(servername):
 
         for continent_name, continent_values in continentids_dict.items():
             continentdata = requests.get(
-                "http://census.daybreakgames.com/s: /get/ps2:v2/map/?world_id=" + serverid + "&zone_ids=" +
+                "http://census.daybreakgames.com/s:" + apikey + "/get/ps2:v2/map/?world_id=" + serverid + "&zone_ids=" +
                 str(continent_values[0])).json()
 
             continentmap = continentdata['map_list'][0]['Regions']['Row']
