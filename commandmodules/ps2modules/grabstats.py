@@ -3,9 +3,10 @@
 from __future__ import division
 from servomodules.ircformatting import changestyle, changecolor
 import requests
+import logging
 
 
-def grabplayerstats(playername):
+def grabplayerstats(playername, apikey):
     """
     Attempt to grab a specified player's battlerank, faction, certs, kill/death count and KDR.
 
@@ -15,13 +16,14 @@ def grabplayerstats(playername):
     :return: Return a formatted string containing the discovered information.
 
     """
+
     factionids_dict = {1: "VS",
                        2: "NC",
                        3: "TR"}
     try:
-        data = requests.get(
-        "http://census.daybreakgames.com/s: /get/ps2:v2/character/?name.first_lower=" + playername.lower() +
-        "&c:resolve=stat_history&c:resolve=world&c:join=world^on:world_id^to:world_id^inject_at:world_id").json()
+        data = requests.get("http://census.daybreakgames.com/s:" + apikey + "/get/ps2:v2/character/?name.first_lower=" +
+                            playername.lower() + "&c:resolve=stat_history&c:resolve=world&c:join=world^on:world_id^to:"
+                                                 "world_id^inject_at:world_id").json()
         censuschar = data['character_list'][0]
         charbr = str(censuschar['battle_rank']['value'])
         charfaction = str(factionids_dict.get(int(censuschar['faction_id'][0])))
@@ -32,5 +34,6 @@ def grabplayerstats(playername):
         return "Got stats for %s - battlerank: %s, faction: %s, certcount: %s, kills: %s, deaths: %s, KD: %s" % \
                (changestyle(playername, "bold"), charbr, charfaction, charcerts,
                 charkills, chardeaths, charkd)
-    except (IndexError, ZeroDivisionError, KeyError, requests.ConnectionError):
+    except (IndexError, ZeroDivisionError, KeyError, requests.ConnectionError) as e:
+        logging.error("Failed to grab Planetside 2 player %s's info. Exception info: %r" % (playername, e))
         return changecolor("Could not retrieve player information.", "red")

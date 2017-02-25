@@ -4,6 +4,7 @@
       <w>basiccmds</w>
       <w>commandresult</w>
       <w>privmsg</w>
+      <w>servoconfig</w>
     </words>
   </dictionary>
 </component>
