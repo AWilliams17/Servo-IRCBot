@@ -1,59 +1,69 @@
-# ToDo: Refactor the docstrings and the serve function.
 from inspect import getargspec
 
 
 class CommandHandler(object):
     def __init__(self):
         """
-        This is a list of commands currently registered.
-        Example:
-            ["!test": test_function]
-        Basically, every 'command' in the dictionary should be just a string linked to a function.
+        This dictionary contains the following:
+        A command string, which is the key, the values of which are:
+            command_description - An optional description describing what the command does. If no description is given
+            during registration of the command, then it defaults to "No description given."
+
+            arg_type - An optional parameter which is used to determine how to treat incoming command calls.
+            If the arg_type is set to "multi string", then it will assume that everything after the
+            command_string in the message is the argument to be used in the registered function, and it
+            passes it as such to the function. If the argument type is default, then it treats everything
+            after the command string as separate parameters, and passes them into the function as such.
+
+            EG, assume !test is of arg_type default, and takes a single argument. If the call were
+                !test param1 param2
+            Then the function paired to !test will have param1 and param2 passed to it, resulting in
+            an error message being returned due to the function not being able to accept the
+            extra parameter in the function call.
+
+            But, if !test is of arg_type multi string, and takes a single argument, then if the call were
+                !test double dundee ducker
+            Then the function associated with !test will have "double dundee ducker" passed into the
+            command call.
         """
         self.registeredcommands = {}
 
     def registercommand(self, command_string, command_description="No description given.", arg_type="default"):
         """
-        Take a given command string(EG: "!test"), and if one is supplied, a description, and place them both into
-        the dictionary registerdcommands along with the decorated function.
+        This function takes the desired command string, description, and arg type, and then if it is
+        a valid command string, the information is paired with a decorated function, via the registeredcommands
+        dictionary.
 
-        :param command_string: The string which is to be 'linked' to a function.
-        :param command_description: The description which describes what the command does. Not required.
-        :param arg_type: Either default or multi string. The only difference between default arguments and multi string
-        ones are just how they are called, with multi string arguments treating string arguments as a single argument.
-        Example:
-            if !test were default, and it was called like so: "!test test test", then it would treat the two trailing
-            tests as extra arguments and return an error.
-            if !test were multi string, and it was called like so: "!test test test", then it would treat the two
-            trailing tests as one argument, and pass them into the function as "test test".
-        :return: If the command string is left empty, then raise a value error. Otherwise, take the decorated
-        function, and 'link' it to the command string. Store both in the registerdcommands dictionary.
+        :param command_string: The desired string used to call the command. EG: !test will execute the function
+        which is associated with !test in the dictionary.
+        :param command_description: An optional value used to describe the command's actions.
+        :param arg_type: An optional value used to figure out how to pass arguments to a decorated function.
+        :return: Returns the decorated function.
         """
         if command_string is "":
             raise ValueError("Can't define a command with no command string")
 
         def decorator(f):
+            """
+            Take the function being decorated, and pair it with the information gathered above. Store the
+            result in the registeredcommands dictionary.
+            :param f: The function being paired with the command call.
+            :return: Return the function.
+            """
             self.registeredcommands[str(command_string).lower()] = [f, command_description, arg_type]
             return f
         return decorator
 
     def serve(self, link):
         """
-        Attempt to take a given command string(a 'link')and its function, and then call said function, passing in
-        arguments from the command call to the function according to its type(default or multi string).
+        This function is used to check potential incoming command calls for any valid registered command strings.
+        If a command string is found, then it attempts to execute the function paired with it, passing in
+        arguments as needed.
 
-        :param link: The command call.
-        Example: "!test testme" - Treat whitespace as trailing arguments, and split it accordingly, putting them
-        into a list. Then, take the first element of that list, assume that its the command, and check and see
-        if it exists in the registerdcommands. If it does, then depending on what type of command its registerd as,
-        pass the contents of the list into the function as its arguments.
-
-        :return: Attempt to return the result of executing the linked function. If the parameters in the command
-        call are greater than or less than the function accepts, then return an error message. Otherwise, if
-        the argument count of function is 0, assume the function takes no arguments, and simply execute the function
-        and return its result. If it takes a single argument, then assume it is a multi string function and pass the
-        rest of the list in as a single argument. Otherwise, pass in all the contents of the list into the function as
-        its arguments.
+        Anything trailing the command string in the message is to be assumed to be arguments, and are treated as such,
+        with how they are passed into the function being determined by the arg_type parameter.
+        :param link:
+        :return:
         """
         if link is '':
             return None

@@ -6,7 +6,9 @@ import requests
 
 def gizoogle(text):
     """
-    Take a string and 'gizoogle' it, then returns the result.
+    Take a string and 'gizoogle' it, then return the result.
+
+    If the function fails to do so, then an error message is returned.
 
     :param text: The string to be gizoogled.
     :return: If successful, then return the result.

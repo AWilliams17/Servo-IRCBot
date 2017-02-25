@@ -10,8 +10,15 @@ def grabcontinentinfo(servername, apikey):
     """
     Attempt to grab information pertaining to which faction has locked which continents on a given server.
 
+    servername is searched for in the serverids_dict, and if it is found, then the id of the server is retrieved,
+    otherwise, an error message is returned notifying the user the server doesn't exist.
+
+    apikey is the Daybreak games API key retrieved from the Servo.ini. If it's an invalid API key, then the
+    function will just return its usual error message.
+
     :param servername: The server to grab continent information from.
-    :return: Upon success, a formatted string containing the locked/unlocked continents is returned.
+    :return: Upon success, a formatted string containing the locked/unlocked continents is returned. Otherwise,
+    return an error message.
     """
 
     serverids_dict = {
@@ -41,6 +48,18 @@ def grabcontinentinfo(servername, apikey):
     serverid = serverids_dict.get(server)
 
     def continentstatuses():
+        """
+        For the continents on the server, loop through each of them, getting the faction ids of the controlling
+        faction of two warpgates. Then, in order to test if the continent is locked, compare the two warpgates
+        against each other. If they are both owned by the same faction, then it's locked by that faction.
+
+        Otherwise, it's unlocked.
+
+        Either way, concatenate the status to the continent statuses list, and after looping through the
+        continents, join the statuses into a string and return it.
+
+        :return: Return the string that was concatenated from the continent statuses list.
+        """
         continent_statuses = []
 
         for continent_name, continent_values in continentids_dict.items():

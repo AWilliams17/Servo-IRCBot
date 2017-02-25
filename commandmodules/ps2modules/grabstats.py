@@ -10,6 +10,9 @@ def grabplayerstats(playername, apikey):
     """
     Attempt to grab a specified player's battlerank, faction, certs, kill/death count and KDR.
 
+    The api key is retrieved from the Servo.ini file. If it is invalid, then the function simply
+    returns its usual error message.
+
     :param playername: This is the player to search for. If the player is not found, then this usually results in an
     indexerror/keyerror. ZeroDivisionErrors occur when a player is outdated and has no kills/deaths in the census db.
 
