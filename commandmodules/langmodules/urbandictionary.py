@@ -1,6 +1,7 @@
-import requests
 from urllib import quote
 from servomodules.ircformatting import changestyle, changecolor
+import requests
+import logging
 
 
 def defineword(word):
@@ -16,7 +17,8 @@ def defineword(word):
     try:
         definition = data['list'][0]['definition']
         return "Got definition for %s: %s" % (changestyle(str(word), "bold"), str(definition))
-    except (IndexError, requests.ConnectionError):
+    except (IndexError, requests.ConnectionError) as e:
+        logging.error("Failed to grab Urban Dictionary definition for word %s, exception info: %r" % (word, e))
         return changecolor("Failed to grab definition.", "red")
     except TypeError:
         return changecolor("Word must be a valid string.", "red")

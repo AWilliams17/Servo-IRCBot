@@ -1,5 +1,3 @@
-# ToDo: Add more logging
-# ToDo: Add .ini for connection settings instead of raw_input
 # ToDo: More centralized way for command registration
 
 import logging
@@ -25,6 +23,8 @@ current_date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 logging.basicConfig(filename=servo_logs_path + "/servo %s.log" % current_date, level=logging.DEBUG)
 
 if not path.exists(servo_config_path):
+    logging.warning("The configuration file does not exist. Now generating a new one...")
+    print "The Servo.ini file does not exist. I will now generate a new one."
     with open(servo_config_path, 'w') as servo_ini:
         servoconfig.add_section("ConnectionSettings")
         servoconfig.set("ConnectionSettings", "Hostname", "0")
@@ -32,11 +32,18 @@ if not path.exists(servo_config_path):
         servoconfig.set("ConnectionSettings", "Channel", "0")
         servoconfig.add_section("Planetside2CommandSettings")
         servoconfig.set("Planetside2CommandSettings", "APIKey", "0")
-        servoconfig.write(servo_ini)
+        try:
+            servoconfig.write(servo_ini)
+        except Exception as e:
+            print "I could not generate a new configuration file. :("
+            logging.critical("Failed to generate a new configuration file: %r" % e)
+        print "I have successfully generated a configuration file."
+        logging.info("Successfully generated a new configuration file.")
 
 servoconfig.read(servo_config_path)
 
 apikey = str(servoconfig['Planetside2CommandSettings']['APIKey'])
+logging.info("The Planetside API key is set: %s" % apikey)
 
 
 @commandhandler.registercommand("!playerstats", "grabs a players stats")
@@ -86,9 +93,6 @@ class Servo(irc.IRCClient):
             logging.info("Got command call: %s" % message)
             self.msg(channel, commandresult)
 
-    def connectionLost(self, reason):
-        logging.critical("Connection was lost: %s" % reason)
-
 
 class ServoFactoryClass(protocol.ClientFactory):
     protocol = Servo
@@ -112,7 +116,7 @@ if __name__ == '__main__':
     logging.info("-")
     logging.info("Beginning new log: %s" % current_date)
     logging.info("-")
-    logging.info("Connecting TCP")
+    logging.info("Connecting to Hostname %s, Port %s, Channel %s..." % (Hostname, str(Port), Channel))
     reactor.connectTCP(Hostname, Port, ServoFactoryClass(Channel, "Servo"))
     logging.info("Running reactor.")
     reactor.run()

@@ -3,6 +3,7 @@
 from __future__ import division
 from servomodules.ircformatting import changestyle, changecolor
 import requests
+import logging
 
 
 def grabplayerstats(playername, apikey):
@@ -33,5 +34,6 @@ def grabplayerstats(playername, apikey):
         return "Got stats for %s - battlerank: %s, faction: %s, certcount: %s, kills: %s, deaths: %s, KD: %s" % \
                (changestyle(playername, "bold"), charbr, charfaction, charcerts,
                 charkills, chardeaths, charkd)
-    except (IndexError, ZeroDivisionError, KeyError, requests.ConnectionError):
+    except (IndexError, ZeroDivisionError, KeyError, requests.ConnectionError) as e:
+        logging.error("Failed to grab Planetside 2 player %s's info. Exception info: %r" % (playername, e))
         return changecolor("Could not retrieve player information.", "red")

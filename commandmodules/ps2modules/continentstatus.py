@@ -1,8 +1,9 @@
 # Note: To use this module, you require an API key from DaybreakGames. Get one from https://census.daybreakgames.com/
 #   and then put it in the whitespace following the s: in the continentdata variable.
 # ToDo: Refactor some of this mess.
-import requests
 from servomodules.ircformatting import changestyle, changecolor
+import requests
+import logging
 
 
 def grabcontinentinfo(servername, apikey):
@@ -64,5 +65,6 @@ def grabcontinentinfo(servername, apikey):
 
     try:
         return "On %s: %s." % (changestyle(server, "bold"), continentstatuses())
-    except (KeyError, requests.ConnectionError):
+    except (KeyError, requests.ConnectionError) as e:
+        logging.error("Failed to return Planetside 2 continent info for server: %s. Exception: %r" % (servername, e))
         return changecolor("Could not retrieve continent information.", "red")
