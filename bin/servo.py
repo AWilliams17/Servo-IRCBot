@@ -7,7 +7,7 @@ from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 from servomodules.commandhandler import CommandHandler
 from commandmodules.ps2modules import grabstats, continentstatus
-from commandmodules.langmodules import gizoogle, urbandictionary
+from commandmodules.langmodules import gizoogle, urbandictionary, dictionary
 from configparser import ConfigParser
 
 commandhandler = CommandHandler()
@@ -58,17 +58,22 @@ def ps2continent(server):
     return continentstatus.grabcontinentinfo(server, apikey)
 
 
-@commandhandler.registercommand("!gizoogle", "Gizoogles a sentence.", "multi string")
+@commandhandler.registercommand("!gizoogle", "gizoogles a sentence.", "multi string")
 def gizoogles(sentence_arg):
     return gizoogle.gizoogle(sentence_arg)
 
 
-@commandhandler.registercommand("!ud", "Looks up the urban dictionary definition of a word.", "multi string")
+@commandhandler.registercommand("!ud", "looks up the urban dictionary definition of a word.", "multi string")
 def urbandefine(word):
     return urbandictionary.defineword(word)
 
 
-@commandhandler.registercommand("!help", "Returns a list of registered commands/specified command description", "optional")
+@commandhandler.registercommand("!define", "looks up the owl dictionary definition of a word.")
+def dictdefine(word, defnum):
+    return dictionary.dictionarydefine(word, defnum)
+
+
+@commandhandler.registercommand("!help", "returns a list of registered commands/specified command description", "optional")
 def helpcmd(cmdstring=""):
     if cmdstring is "":
         return "Usage: !help (command) - Registered commands: %s" % ', '.join(commandhandler.registeredcommands.keys())

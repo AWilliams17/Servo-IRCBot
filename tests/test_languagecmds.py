@@ -4,7 +4,7 @@ from servomodules.ircformatting import changecolor, changestyle
 @pytest.fixture(scope='module')
 def commandhandler_setup(request):
     from servomodules.commandhandler import CommandHandler
-    from commandmodules.langmodules import gizoogle, urbandictionary
+    from commandmodules.langmodules import gizoogle, urbandictionary, dictionary
     commandhandler = CommandHandler()
 
     @commandhandler.registercommand("!gizoogle", "Gizoogles a sentence.", "multi string")
@@ -14,6 +14,10 @@ def commandhandler_setup(request):
     @commandhandler.registercommand("!ud", "Looks up the urban dictionary definition of a word.", "multi string")
     def urbandefine(word):
         return urbandictionary.defineword(word)
+
+    @commandhandler.registercommand("!define", "looks up the owl dictionary definition of a word.")
+    def dictdefine(word, defnum):
+        return dictionary.dictionarydefine(word, defnum)
 
     return commandhandler
 
@@ -28,3 +32,7 @@ class Test_LanguageCmds(object):
         assert commandhandler_setup.serve("!ud test") == "Got definition for %s: A process for testing things" % \
                                                          changestyle("test", "bold")
         assert commandhandler_setup.serve("!ud ijaderogaejoiy") == changecolor("Failed to grab definition.", "red")
+
+    def test_dictionary(self, commandhandler_setup):
+        assert commandhandler_setup.serve("!define test 0") == "Got definition for %s: Metallurgy" % \
+            changestyle("test", "bold")
