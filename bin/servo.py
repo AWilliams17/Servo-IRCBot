@@ -30,6 +30,7 @@ if not path.exists(servo_config_path):
         servoconfig.set("ConnectionSettings", "Hostname", "0")
         servoconfig.set("ConnectionSettings", "Port", "0")
         servoconfig.set("ConnectionSettings", "Channel", "0")
+        servoconfig.set("ConnectionSettings", "Nickname", "Servo")
         servoconfig.add_section("Planetside2CommandSettings")
         servoconfig.set("Planetside2CommandSettings", "APIKey", "0")
         try:
@@ -43,6 +44,7 @@ if not path.exists(servo_config_path):
 servoconfig.read(servo_config_path)
 
 apikey = str(servoconfig['Planetside2CommandSettings']['APIKey'])
+nicknamec = str(servoconfig['ConnectionSettings']['Nickname'])
 logging.info("The Planetside API key is set: %s" % apikey)
 
 
@@ -81,7 +83,7 @@ class Servo(irc.IRCClient):
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
         logging.info("Connection established.")
-        self.setNick("Servo")
+        self.setNick(nicknamec)
         logging.info("Nickname set.")
 
     def signedOn(self):
@@ -117,6 +119,6 @@ if __name__ == '__main__':
     logging.info("Beginning new log: %s" % current_date)
     logging.info("-")
     logging.info("Connecting to Hostname %s, Port %s, Channel %s..." % (Hostname, str(Port), Channel))
-    reactor.connectTCP(Hostname, Port, ServoFactoryClass(Channel, "Servo"))
+    reactor.connectTCP(Hostname, Port, ServoFactoryClass(Channel, nicknamec))
     logging.info("Running reactor.")
     reactor.run()
