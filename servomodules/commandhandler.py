@@ -76,7 +76,7 @@ class CommandHandler(object):
                 args = len(getargspec(linked_function).args)
                 if len(link_list) < args and arg_type is not "optional":
                     return "Too few parameters (%s given, %s needed)" % (len(link_list), args)
-                elif len(link_list) > args and arg_type is not "multi string":
+                elif len(link_list) > args and arg_type is not "multi string" and arg_type is "default":
                     return "Too many parameters (%s given, %s needed)" % (len(link_list), args)
                 else:
                     if args is 0:

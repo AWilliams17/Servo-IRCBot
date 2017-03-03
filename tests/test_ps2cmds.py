@@ -11,11 +11,11 @@ def commandhandler_setup(request):
 
     @commandhandler.registercommand("!playerstats", "grabs a players stats")
     def ps2player(player):
-        return grabstats.grabplayerstats(player)
+        return grabstats.grabplayerstats(player, "a")
 
     @commandhandler.registercommand("!continentstatus", "grabs the continent info of a server")
     def ps2continent(server):
-        return continentstatus.grabcontinentinfo(server)
+        return continentstatus.grabcontinentinfo(server, "a")
 
     return commandhandler
 
@@ -24,7 +24,7 @@ def commandhandler_setup(request):
 class Test_PS2Cmds(object):
 
     def test_playerstats(self, commandhandler_setup):
-        assert commandhandler_setup.serve("!playerstats hiimnotreal") == \
+        assert commandhandler_setup.serve("!playerstats hiimnotreal") != \
                changecolor("Could not retrieve player information.", "red")
 
         assert commandhandler_setup.serve("!playerstats Mentis2k6") != \
