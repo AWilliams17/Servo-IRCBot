@@ -4,7 +4,13 @@ import requests
 import logging
 
 def dictionarydefine(word, defnum):
-
+    """
+    Grabs the definition of a word from the owlbot.info site.
+    :param word: The word to be searched for.
+    :param defnum: If multiple definitions are found, then this is the number indicating which to grab.
+    :return: If a word doesn't exist, then it defaults to "Failed to grab definition." Otherwise, it returns
+    the definition.
+    """
     try:
         r = requests.get("https://owlbot.info/api/v1/dictionary/%s" % quote(word, safe=''))
         data = r.json()
