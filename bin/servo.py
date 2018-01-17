@@ -19,8 +19,8 @@ servo_config_path = servo_path + "/servo.ini"
 if not path.exists(servo_logs_path):
     makedirs(servo_logs_path)
 
-current_date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-logging.basicConfig(filename=servo_logs_path + "/servo %s.log" % current_date, level=logging.DEBUG)
+current_date = strftime("%Y-%m-%d - %H-%M-%S", gmtime())
+logging.basicConfig(filename="%s\servo %s.log" % (servo_logs_path, current_date), level=logging.DEBUG)
 
 if not path.exists(servo_config_path):
     logging.warning("The configuration file does not exist. Now generating a new one...")
@@ -115,6 +115,7 @@ class ServoFactoryClass(protocol.ClientFactory):
 
     def clientConnectionFailed(self, connector, reason):
         logging.critical("Connection failed: %s" % reason)
+
 
 if __name__ == '__main__':
     Hostname = str(servoconfig['ConnectionSettings']['Hostname'])
