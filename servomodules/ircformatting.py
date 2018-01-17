@@ -16,6 +16,12 @@ style_codes = {
 
 
 def change_style(string, style):
+    """
+    Changes the style of an IRC string.
+    :param string: The string to apply styling to.
+    :param style: The style you want.
+    :return: Returns the styled string.
+    """
     if style in style_codes:
         desired_style = style_codes.get(style)
         return "%s%s%s" % (desired_style, string, desired_style)
@@ -24,6 +30,12 @@ def change_style(string, style):
 
 
 def change_color(string, color):
+    """
+    Changes the color of an IRC string.
+    :param string: The string to color.
+    :param color: The color you want.
+    :return: Returns the colored string.
+    """
     if color in color_codes:
         desired_color = color_codes.get(color)
         return "%s%s%s%s" % ("\x03", desired_color, string, "\x03")
