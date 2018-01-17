@@ -10,8 +10,8 @@ from commandmodules.ps2modules import grabstats, continentstatus
 from commandmodules.langmodules import gizoogle, urbandictionary, dictionary
 from configparser import ConfigParser
 
-commandhandler = CommandHandler()
-servoconfig = ConfigParser()
+CommandHandler = CommandHandler()
+servo_config = ConfigParser()
 servo_path = getcwd().split("/bin")[0]
 servo_logs_path = servo_path + "/logs"
 servo_config_path = servo_path + "/servo.ini"
@@ -26,76 +26,76 @@ if not path.exists(servo_config_path):
     logging.warning("The configuration file does not exist. Now generating a new one...")
     print "The Servo.ini file does not exist. I will now generate a new one."
     with open(servo_config_path, 'w') as servo_ini:
-        servoconfig.add_section("ConnectionSettings")
-        servoconfig.set("ConnectionSettings", "Hostname", "0")
-        servoconfig.set("ConnectionSettings", "Port", "0")
-        servoconfig.set("ConnectionSettings", "Channel", "0")
-        servoconfig.set("ConnectionSettings", "Nickname", "Servo")
-        servoconfig.add_section("Planetside2CommandSettings")
-        servoconfig.set("Planetside2CommandSettings", "APIKey", "0")
+        servo_config.add_section("ConnectionSettings")
+        servo_config.set("ConnectionSettings", "Hostname", "0")
+        servo_config.set("ConnectionSettings", "Port", "0")
+        servo_config.set("ConnectionSettings", "Channel", "0")
+        servo_config.set("ConnectionSettings", "Nickname", "Servo")
+        servo_config.add_section("Planetside2CommandSettings")
+        servo_config.set("Planetside2CommandSettings", "APIKey", "0")
         try:
-            servoconfig.write(servo_ini)
+            servo_config.write(servo_ini)
         except Exception as e:
             print "I could not generate a new configuration file. :("
             logging.critical("Failed to generate a new configuration file: %r" % e)
         print "I have successfully generated a configuration file."
         logging.info("Successfully generated a new configuration file.")
 
-servoconfig.read(servo_config_path)
+servo_config.read(servo_config_path)
 
-apikey = str(servoconfig['Planetside2CommandSettings']['APIKey'])
-nicknamec = str(servoconfig['ConnectionSettings']['Nickname'])
-logging.info("The Planetside API key is set: %s" % apikey)
-
-
-@commandhandler.registercommand("!playerstats", "grabs a players stats")
-def ps2player(player):
-    return grabstats.grabplayerstats(player, apikey)
+api_key = str(servo_config['Planetside2CommandSettings']['APIKey'])
+nick_name = str(servo_config['ConnectionSettings']['Nickname'])
+logging.info("The Planetside API key is set: %s" % api_key)
 
 
-@commandhandler.registercommand("!continentstatus", "grabs the continent info of a server")
-def ps2continent(server):
-    return continentstatus.grabcontinentinfo(server, apikey)
+@CommandHandler.registercommand("!playerstats", "grabs a players stats")
+def ps2_player(player):
+    return grabstats.grabplayerstats(player, api_key)
 
 
-@commandhandler.registercommand("!gizoogle", "gizoogles a sentence.", "multi string")
-def gizoogles(sentence_arg):
+@CommandHandler.registercommand("!continentstatus", "grabs the continent info of a server")
+def ps2_continent(server):
+    return continentstatus.grabcontinentinfo(server, api_key)
+
+
+@CommandHandler.registercommand("!gizoogle", "gizoogles a sentence.", "multi string")
+def gizoogle_s(sentence_arg):
     return gizoogle.gizoogle(sentence_arg)
 
 
-@commandhandler.registercommand("!ud", "looks up the urban dictionary definition of a word.", "multi string")
-def urbandefine(word):
+@CommandHandler.registercommand("!ud", "looks up the urban dictionary definition of a word.", "multi string")
+def urban_define(word):
     return urbandictionary.defineword(word)
 
 
-@commandhandler.registercommand("!define", "looks up the owl dictionary definition of a word.")
-def dictdefine(word, defnum):
+@CommandHandler.registercommand("!define", "looks up the owl dictionary definition of a word.")
+def dict_define(word, defnum):
     return dictionary.dictionarydefine(word, defnum)
 
 
-@commandhandler.registercommand("!help", "returns a list of registered commands/specified command description", "optional")
-def helpcmd(cmdstring=""):
-    if cmdstring is "":
-        return "Usage: !help (command) - Registered commands: %s" % ', '.join(commandhandler.registeredcommands.keys())
+@CommandHandler.registercommand("!help", "returns a list of registered commands/specified command description", "optional")
+def help_cmd(commandstring=""):
+    if commandstring is "":
+        return "Usage: !help (command) - Registered commands: %s" % ', '.join(CommandHandler.registeredcommands.keys())
     else:
         try:
-            return "%s: %s" % (cmdstring, commandhandler.registeredcommands.get(cmdstring)[1])
+            return "%s: %s" % (commandstring, CommandHandler.registeredcommands.get(commandstring)[1])
         except TypeError:
-            return "Failed to retrieve definition for command: %s" % cmdstring
+            return "Failed to retrieve definition for command: %s" % commandstring
 
 
 class Servo(irc.IRCClient):
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
         logging.info("Connection established.")
-        self.setNick(nicknamec)
+        self.setNick(nick_name)
         logging.info("Nickname set.")
 
     def signedOn(self):
-        self.join(Channel)
+        self.join(CHANNEL)
 
     def privmsg(self, user, channel, message):
-        commandresult = commandhandler.serve(message)
+        commandresult = CommandHandler.serve(message)
         if commandresult is not None:
             logging.info("Got command call: %s" % message)
             self.msg(channel, commandresult)
@@ -118,13 +118,13 @@ class ServoFactoryClass(protocol.ClientFactory):
 
 
 if __name__ == '__main__':
-    Hostname = str(servoconfig['ConnectionSettings']['Hostname'])
-    Port = int(servoconfig['ConnectionSettings']['Port'])
-    Channel = str(servoconfig['ConnectionSettings']['Channel'])
+    HOSTNAME = str(servo_config['ConnectionSettings']['Hostname'])
+    PORT = int(servo_config['ConnectionSettings']['Port'])
+    CHANNEL = str(servo_config['ConnectionSettings']['Channel'])
     logging.info("-")
     logging.info("Beginning new log: %s" % current_date)
     logging.info("-")
-    logging.info("Connecting to Hostname %s, Port %s, Channel %s..." % (Hostname, str(Port), Channel))
-    reactor.connectTCP(Hostname, Port, ServoFactoryClass(Channel, nicknamec))
+    logging.info("Connecting to Hostname %s, Port %s, Channel %s..." % (HOSTNAME, str(PORT), CHANNEL))
+    reactor.connectTCP(HOSTNAME, PORT, ServoFactoryClass(CHANNEL, nick_name))
     logging.info("Running reactor.")
     reactor.run()
