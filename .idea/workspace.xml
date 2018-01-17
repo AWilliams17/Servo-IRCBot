@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4b94b24a-5595-4e4e-bbf1-b848ea8013c3" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/servomodules/ircformatting.py" afterPath="$PROJECT_DIR$/servomodules/ircformatting.py" />
-    </list>
+    <list default="true" id="4b94b24a-5595-4e4e-bbf1-b848ea8013c3" name="Default" comment="" />
     <ignored path="Servo.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />

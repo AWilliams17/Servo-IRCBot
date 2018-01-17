@@ -1,7 +1,5 @@
 # Servo-IRCBot
-A Twisted IRC Bot with Command Handling.
+A terrible Twisted IRC Bot with Command Handling, written for fun and giggles.
 
-I wrote this IRC bot for fun and giggles.
-
-Included are my Planetside 2 command modules and Gizoogle and Urban Dictionary modules. They work, but as noted in the PS2 Modules,
-you require an API key to use them.
+Included are my Planetside 2 command modules and Gizoogle and Urban Dictionary modules. They were all written a year ago.
+I have absolutely no idea if they work anymore. lol.
