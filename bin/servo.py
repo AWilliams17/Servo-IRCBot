@@ -48,40 +48,40 @@ nick_name = str(servo_config['ConnectionSettings']['Nickname'])
 logging.info("The Planetside API key is set: %s" % api_key)
 
 
-@CommandHandler.registercommand("!playerstats", "grabs a players stats")
+@CommandHandler.register_command("!playerstats", "grabs a players stats")
 def ps2_player(player):
-    return grabstats.grabplayerstats(player, api_key)
+    return grabstats.grab_player_stats(player, api_key)
 
 
-@CommandHandler.registercommand("!continentstatus", "grabs the continent info of a server")
+@CommandHandler.register_command("!continentstatus", "grabs the continent info of a server")
 def ps2_continent(server):
-    return continentstatus.grabcontinentinfo(server, api_key)
+    return continentstatus.grab_continent_info(server, api_key)
 
 
-@CommandHandler.registercommand("!gizoogle", "gizoogles a sentence.", "multi string")
+@CommandHandler.register_command("!gizoogle", "gizoogles a sentence.", "multi string")
 def gizoogle_s(sentence_arg):
     return gizoogle.gizoogle(sentence_arg)
 
 
-@CommandHandler.registercommand("!ud", "looks up the urban dictionary definition of a word.", "multi string")
+@CommandHandler.register_command("!ud", "looks up the urban dictionary definition of a word.", "multi string")
 def urban_define(word):
-    return urbandictionary.defineword(word)
+    return urbandictionary.define_word(word)
 
 
-@CommandHandler.registercommand("!define", "looks up the owl dictionary definition of a word.")
-def dict_define(word, defnum):
-    return dictionary.dictionarydefine(word, defnum)
+@CommandHandler.register_command("!define", "looks up the owl dictionary definition of a word.")
+def dict_define(word, def_num):
+    return dictionary.dictionary_define(word, def_num)
 
 
-@CommandHandler.registercommand("!help", "returns a list of registered commands/specified command description", "optional")
-def help_cmd(commandstring=""):
-    if commandstring is "":
-        return "Usage: !help (command) - Registered commands: %s" % ', '.join(CommandHandler.registeredcommands.keys())
+@CommandHandler.register_command("!help", "returns a list of registered commands/specified command description", "optional")
+def help_cmd(command_string=""):
+    if command_string is "":
+        return "Usage: !help (command) - Registered commands: %s" % ', '.join(CommandHandler.registered_commands.keys())
     else:
         try:
-            return "%s: %s" % (commandstring, CommandHandler.registeredcommands.get(commandstring)[1])
+            return "%s: %s" % (command_string, CommandHandler.registered_commands.get(command_string)[1])
         except TypeError:
-            return "Failed to retrieve definition for command: %s" % commandstring
+            return "Failed to retrieve definition for command: %s" % command_string
 
 
 class Servo(irc.IRCClient):

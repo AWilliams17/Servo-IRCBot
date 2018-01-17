@@ -3,14 +3,14 @@ from inspect import getargspec
 
 class CommandHandler(object):
     def __init__(self):
-        self.registeredcommands = {}
+        self.registered_commands = {}
 
-    def registercommand(self, command_string, command_description="No description given.", arg_type="default"):
+    def register_command(self, command_string, command_description="No description given.", arg_type="default"):
         if command_string is "":
             raise ValueError("Can't define a command with no command string")
 
         def decorator(f):
-            self.registeredcommands[str(command_string).lower()] = [f, command_description, arg_type]
+            self.registered_commands[str(command_string).lower()] = [f, command_description, arg_type]
             return f
         return decorator
 
@@ -19,9 +19,9 @@ class CommandHandler(object):
             return None
         link_list = filter(None, link.split(" "))
         key_length = len(link_list[0]) + 1
-        if link_list[0] in self.registeredcommands:
-            arg_type = self.registeredcommands.get(str(link_list[0]).lower())[2]
-            linked_function = self.registeredcommands.get(str(link_list.pop(0)).lower())[0]
+        if link_list[0] in self.registered_commands:
+            arg_type = self.registered_commands.get(str(link_list[0]).lower())[2]
+            linked_function = self.registered_commands.get(str(link_list.pop(0)).lower())[0]
             if linked_function:
                 args = len(getargspec(linked_function).args)
                 if len(link_list) < args and arg_type is not "optional":

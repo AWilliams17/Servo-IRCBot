@@ -15,7 +15,7 @@ style_codes = {
 }
 
 
-def changestyle(string, style):
+def change_style(string, style):
     if style in style_codes:
         desired_style = style_codes.get(style)
         return "%s%s%s" % (desired_style, string, desired_style)
@@ -23,7 +23,7 @@ def changestyle(string, style):
         raise ValueError("The style '%s' does not exist! Valid styles: %s" % (str(style), style_codes.keys()))
 
 
-def changecolor(string, color):
+def change_color(string, color):
     if color in color_codes:
         desired_color = color_codes.get(color)
         return "%s%s%s%s" % ("\x03", desired_color, string, "\x03")

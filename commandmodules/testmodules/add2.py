@@ -1,4 +1,4 @@
-def add2toin(num):
+def add2_to_in(num):
     try:
         return int(num) + 2
     except ValueError:

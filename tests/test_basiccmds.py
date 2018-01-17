@@ -2,28 +2,28 @@ import pytest
 
 
 @pytest.fixture(scope='module')
-def commandhandler_setup(request):
+def command_handler_setup(request):
     from servomodules.commandhandler import CommandHandler
     from commandmodules.testmodules import multiargadd, add2, sayhi
-    commandhandler = CommandHandler()
+    command_handler = CommandHandler()
 
-    @commandhandler.registercommand("!add2", "adds 2 to given parameter")
-    def add2cmd(num):
+    @command_handler.register_command("!add2", "adds 2 to given parameter")
+    def add2_cmd(num):
         return add2.add2toin(num)
 
-    @commandhandler.registercommand("!multiargadd", "adds multiple args")
-    def multiargaddcmd(num1, num2, num3):
+    @command_handler.register_command("!multiargadd", "adds multiple args")
+    def multi_arg_add_cmd(num1, num2, num3):
         return multiargadd.add_multiargs(num1, num2, num3)
 
-    @commandhandler.registercommand("!sayhi", "says hi to you :D", "multi string")
-    def sayhicmd(name):
+    @command_handler.register_command("!sayhi", "says hi to you :D", "multi string")
+    def say_hi_cmd(name):
         return sayhi.sayhitoname(name)
 
-    return commandhandler
+    return command_handler
 
 
-@pytest.mark.usefixtures('commandhandler_setup')
-class Test_BasicCmds(object):
+@pytest.mark.usefixtures('command_handler_setup')
+class TestBasicCommands(object):
 
     def test_add2(self, commandhandler_setup):  # Tests for single argument commands.
         assert commandhandler_setup.serve("!add2 4") == 6
