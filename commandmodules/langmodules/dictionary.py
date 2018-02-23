@@ -1,5 +1,5 @@
 from urllib import quote
-from servomodules.ircformatting import change_style, change_color
+from servomodules.ircformatting import change_style, change_color, ColorCodes, StyleCodes
 import requests
 import logging
 
@@ -16,12 +16,12 @@ def dictionary_define(word, def_num):
         r = requests.get("https://owlbot.info/api/v1/dictionary/%s" % quote(word, safe=''))
         data = r.json()
         definition = data[int(def_num)].get("defenition")
-        return "Got definition for %s: %s" % (change_style(str(word), "bold"), str(definition))
+        return "Got definition for %s: %s" % (change_style(str(word), StyleCodes.BOLD), str(definition))
 
     except (IndexError, requests.ConnectionError) as e:
         logging.error("Failed to grab Owl Dictionary definition for word %s, exception info: %r" % (word, e))
-        return change_color("Failed to grab definition.", "red")
+        return change_color("Failed to grab definition.", ColorCodes.RED)
     except TypeError:
-        return change_color("Word must be a valid string.", "red")
+        return change_color("Word must be a valid string.", ColorCodes.RED)
     except ValueError:
-        return change_color("Definition number must be a valid int.", "red")
+        return change_color("Definition number must be a valid int.", ColorCodes.RED)

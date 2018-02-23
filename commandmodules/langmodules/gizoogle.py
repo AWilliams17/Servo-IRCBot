@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from servomodules.ircformatting import change_color
+from servomodules.ircformatting import change_color, ColorCodes, StyleCodes
 import logging
 import requests
 
@@ -20,6 +20,6 @@ def gizoogle(text):
         return str(BeautifulSoup(html, "html5lib").textarea.contents[0].strip())
     except (AttributeError, requests.ConnectionError) as e:
         logging.error("Failed to receive gizoogled text: %r" % e)
-        return change_color("Failed to grab gizoogled text.", "red")
+        return change_color("Failed to grab gizoogled text.", ColorCodes.RED)
     except TypeError:
-        return change_color("Word must be a valid string.", "red")
+        return change_color("Word must be a valid string.", ColorCodes.RED)

@@ -24,14 +24,14 @@ def command_handler_setup(request):
 class TestPS2Commands(object):
     def test_player_stats(self):
         assert command_handler_setup.serve("!playerstats hiimnotreal") != \
-            change_color("Could not retrieve player information.", "red")
+            change_color("Could not retrieve player information.", ColorCodes.RED)
 
         assert command_handler_setup.serve("!playerstats Mentis2k6") != \
-            change_color("Could not retrieve player information.", "red")
+            change_color("Could not retrieve player information.", ColorCodes.RED)
 
         assert command_handler_setup.serve("!playerstats IHacksXVS") != \
-            change_color("Could not retrieve player information.", "red")
+            change_color("Could not retrieve player information.", ColorCodes.RED)
 
     def test_continent_status(self):
-        assert command_handler_setup.serve("!continentstatus emerald") != change_color("Invalid server name.", "red")
-        assert command_handler_setup.serve("!continentstatus foo") == change_color("Invalid servername: foo", "red")
+        assert command_handler_setup.serve("!continentstatus emerald") != change_color("Invalid server name.", ColorCodes.RED)
+        assert command_handler_setup.serve("!continentstatus foo") == change_color("Invalid servername: foo", ColorCodes.RED)

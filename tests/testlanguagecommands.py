@@ -31,9 +31,9 @@ class TestLanguageCommands(object):
 
     def test_urbandictionary(self):
         assert command_handler_setup.serve("!ud test") == "Got definition for %s: A process for testing things" % \
-               change_style("test", "bold")
-        assert command_handler_setup.serve("!ud ijaderogaejoiy") == change_color("Failed to grab definition.", "red")
+               change_style("test", StyleCodes.BOLD)
+        assert command_handler_setup.serve("!ud ijaderogaejoiy") == change_color("Failed to grab definition.", ColorCodes.RED)
 
     def test_dictionary(self):
         assert command_handler_setup.serve("!define test 0") == "Got definition for %s: Metallurgy" % \
-               change_style("test", "bold")
+               change_style("test", StyleCodes.BOLD)

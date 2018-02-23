@@ -1,7 +1,7 @@
 # Note: To use this module, you require an API key from DaybreakGames. Get one from https://census.daybreakgames.com/
 #   and then put it in the whitespace following the s: in the data variable.
 from __future__ import division
-from servomodules.ircformatting import change_style, change_color
+from servomodules.ircformatting import change_style, change_color, ColorCodes, StyleCodes
 import requests
 import logging
 
@@ -35,8 +35,8 @@ def grab_player_stats(player_name, api_key):
         char_deaths = str(census_char['stats']['stat_history'][2]['all_time'])
         char_kd = round(int(char_kills)/int(char_deaths), 2)
         return "Got stats for %s - battlerank: %s, faction: %s, certcount: %s, kills: %s, deaths: %s, KD: %s" % \
-               (change_style(player_name, "bold"), char_br, char_faction, char_certs,
+               (change_style(player_name, StyleCodes.BOLD), char_br, char_faction, char_certs,
                 char_kills, char_deaths, char_kd)
     except (IndexError, ZeroDivisionError, KeyError, requests.ConnectionError) as e:
         logging.error("Failed to grab Planetside 2 player %s's info. Exception info: %r" % (player_name, e))
-        return change_color("Could not retrieve player information.", "red")
+        return change_color("Could not retrieve player information.", ColorCodes.RED)

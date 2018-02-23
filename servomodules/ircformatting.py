@@ -34,6 +34,7 @@ def change_style(string, style_type):
     """
     return "%s%s%s" % (style_type.value, string, style_type.value)
 
+
 def change_color(string, color):
     """
     Changes the color of an IRC string.

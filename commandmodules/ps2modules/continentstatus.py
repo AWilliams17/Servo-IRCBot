@@ -1,6 +1,6 @@
 # Note: To use this module, you require an API key from DaybreakGames. Get one from https://census.daybreakgames.com/
 #   and then put it in the whitespace following the s: in the continent_data variable.
-from servomodules.ircformatting import change_style, change_color
+from servomodules.ircformatting import change_style, change_color, StyleCodes, ColorCodes
 import requests
 import logging
 
@@ -30,9 +30,9 @@ def grab_continent_info(server_name, api_key):
     }
 
     faction_ids = {
-        1: change_color("VS", "purple"),
-        2: change_color("NC", "blue"),
-        3: change_color("TR", "red")
+        1: change_color("VS", ColorCodes.PURPLE),
+        2: change_color("NC", ColorCodes.BLUE),
+        3: change_color("TR", ColorCodes.RED)
     }
 
     continent_ids = {
@@ -44,7 +44,7 @@ def grab_continent_info(server_name, api_key):
 
     server = server_name[0].upper() + server_name[1:].lower()
     if server not in server_ids:
-        return change_color("Invalid servername: %s" % server_name, "red")
+        return change_color("Invalid servername: %s" % server_name, ColorCodes.RED)
     server_id = server_ids.get(server)
 
     def continent_statuses():
@@ -73,17 +73,17 @@ def grab_continent_info(server_name, api_key):
             warpgate2_controlling_faction = continent_map[continent_values[2]]['RowData']['FactionId']
 
             if warpgate1_controlling_faction != warpgate2_controlling_faction:
-                continent_status_results.append("%s is unlocked" % change_style(continent_name, "bold"))
+                continent_status_results.append("%s is unlocked" % change_style(continent_name, StyleCodes.BOLD))
             else:
                 continent_status_results.append("%s was locked by the %s" %
-                                                (change_style(continent_name, "bold"),
+                                                (change_style(continent_name, StyleCodes.BOLD),
                                                  faction_ids.get(int(warpgate1_controlling_faction))))
 
         continent_status_results.insert(3, "and")
         return ', '.join(continent_status_results).replace("and,", "and")
 
     try:
-        return "On %s: %s." % (change_style(server, "bold"), continent_statuses())
+        return "On %s: %s." % (change_style(server, StyleCodes.BOLD), continent_statuses())
     except (KeyError, requests.ConnectionError) as e:
         logging.error("Failed to return Planetside 2 continent info for server: %s. Exception: %r" % (server_name, e))
-        return change_color("Could not retrieve continent information.", "red")
+        return change_color("Could not retrieve continent information.", ColorCodes.RED)
