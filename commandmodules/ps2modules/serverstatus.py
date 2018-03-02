@@ -48,11 +48,11 @@ def server_status(server_name):
             if i[3] != 'Up':
                 status = "The server '%s' is down." % change_style(i[1], StyleCodes.BOLD)
             else:
-                status = "%s is online with a total population of %s --- %s VS, %s TR, %s NC." \
+                status = "%s is online with a total population of %s --- %s, %s, and %s." \
                          % (change_style(i[1], StyleCodes.BOLD), change_color(total_population, ColorCodes.GREEN),
-                            change_color(vs_population, ColorCodes.PURPLE),
-                            change_color(tr_population, ColorCodes.RED),
-                            change_color(nc_population, ColorCodes.TEAL))
+                            change_color(str(vs_population) + " VS", ColorCodes.PURPLE),
+                            change_color(str(tr_population) + " TR", ColorCodes.RED),
+                            change_color(str(nc_population) + " NC", ColorCodes.TEAL))
 
     return status
 
