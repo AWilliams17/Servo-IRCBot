@@ -26,7 +26,7 @@ setup(
     keywords='ircbot twisted twisted-ircbot irc',
     packages=find_packages(exclude=['tests']),
 
-    install_requires=['twisted', 'beautifulsoup4', 'requests'],
+    install_requires=['twisted', 'BeautifulSoup', 'requests'],
 
     entry_points={
         'console_scripts': [
