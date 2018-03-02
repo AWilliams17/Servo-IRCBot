@@ -1,6 +1,6 @@
 from servomodules.ircformatting import change_style, change_color, StyleCodes, ColorCodes
-import requests
 from BeautifulSoup import BeautifulSoup
+import requests
 import logging
 
 r = requests.get("http://www.planetside-universe.com/server_status.php").content
@@ -16,7 +16,7 @@ server_ids = {
     }
 
 
-def server_status(server_name):
+def grab_server_status(server_name):
     name_arg = str(server_name).lower()
     if name_arg not in server_ids:
         return change_color("Error: That server does not exist.", ColorCodes.RED)

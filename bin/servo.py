@@ -6,7 +6,7 @@ from os import getcwd, path, makedirs
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 from servomodules.commandhandler import CommandHandler
-from commandmodules.ps2modules import grabstats, continentstatus
+from commandmodules.ps2modules import grabstats, continentstatus, serverstatus
 from commandmodules.langmodules import gizoogle, urbandictionary, dictionary
 from configparser import ConfigParser
 
@@ -56,6 +56,11 @@ def ps2_player(player):
 @CommandHandler.register_command("!continentstatus", "grabs the continent info of a server")
 def ps2_continent(server):
     return continentstatus.grab_continent_info(server, api_key)
+
+
+@CommandHandler.register_command("!serverstatus", "grabs the requested server's status and population count")
+def ps2_server_status(server):
+    return serverstatus.grab_server_status(server)
 
 
 @CommandHandler.register_command("!gizoogle", "gizoogles a sentence.", "multi string")
