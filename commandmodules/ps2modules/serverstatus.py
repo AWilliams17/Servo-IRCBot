@@ -7,15 +7,26 @@ r = requests.get("http://www.planetside-universe.com/server_status.php").content
 bs4 = BeautifulSoup(r).find('tbody', attrs={'id': 'server_status'})
 result = bs4.text
 
-server_names = ['emerald', 'connery', 'cobalt', 'miller', 'briggs']
+server_ids = {
+        "emerald": "17",
+        "connery": "1",
+        "briggs": "25",
+        "cobalt": "13",
+        "miller": "10"
+    }
 
 
 def server_status(server_name):
     name_arg = str(server_name).lower()
-    if name_arg not in server_names:
+    if name_arg not in server_ids:
         return "err server not existerino"
 
     r = requests.get("http://www.planetside-universe.com/server_status.php")
+    rp = requests.get("http://ps2.fisu.pw/api/population/?world=%s" % server_ids.get(name_arg)).json()
+    vs_population = rp['result'][0]['vs']
+    tr_population = rp['result'][0]['tr']
+    nc_population = rp['result'][0]['nc']
+    total_population = str(int(vs_population) + int(tr_population) + int(nc_population))
 
     if r.status_code != 200:
         return "server returned %s" % r.status_code
@@ -35,9 +46,13 @@ def server_status(server_name):
     for i in data:
         if i[1] == name_arg.title():
             if i[3] != 'Up':
-                status = "The server '%s' is down." % i[1]
+                status = "The server '%s' is down." % change_style(i[1], StyleCodes.BOLD)
             else:
-                status = "%s is %s with a %s population." % (i[1], str(i[3]).lower(), i[2])
+                status = "%s is online with a total population of %s --- %s VS, %s TR, %s NC." \
+                         % (change_style(i[1], StyleCodes.BOLD), change_color(total_population, ColorCodes.GREEN),
+                            change_color(vs_population, ColorCodes.PURPLE),
+                            change_color(tr_population, ColorCodes.RED),
+                            change_color(nc_population, ColorCodes.TEAL))
 
     return status
 
