@@ -62,5 +62,7 @@ def grab_server_status(server_name):
                             change_color(str(vs_population) + " VS", ColorCodes.PURPLE),
                             change_color(str(tr_population) + " TR", ColorCodes.RED),
                             change_color(str(nc_population) + " NC", ColorCodes.TEAL))
+        else:
+            status = change_color("Error: failed to get proper result. Try again?", ColorCodes.RED)  # bad
 
     return status
