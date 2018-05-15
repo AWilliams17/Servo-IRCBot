@@ -80,7 +80,7 @@ def dict_define(word, def_num):
 
 @CommandHandler.register_command("!help", "returns a list of registered commands/specified command description", "optional")
 def help_cmd(command_string=""):
-    if command_string is "":
+    if command_string == "":
         return "Usage: !help (command) - Registered commands: %s" % ', '.join(CommandHandler.registered_commands.keys())
     else:
         try:

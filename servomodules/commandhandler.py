@@ -6,7 +6,7 @@ class CommandHandler(object):
         self.registered_commands = {}
 
     def register_command(self, command_string, command_description="No description given.", arg_type="default"):
-        if command_string is "":
+        if command_string == "":
             raise ValueError("Can't define a command with no command string")
 
         def decorator(f):
@@ -15,7 +15,7 @@ class CommandHandler(object):
         return decorator
 
     def serve(self, link):
-        if link is '':
+        if link == '':
             return None
         link_list = filter(None, link.split(" "))
         key_length = len(link_list[0]) + 1
@@ -29,9 +29,9 @@ class CommandHandler(object):
                 elif len(link_list) > args and arg_type is not "multi string" and arg_type is "default":
                     return "Too many parameters (%s given, %s needed)" % (len(link_list), args)
                 else:
-                    if args is 0:
+                    if args == 0:
                         return linked_function()
-                    elif args is 1:
+                    elif args == 1:
                         return linked_function(str(link[key_length:]))
                     else:
                         return linked_function(*link_list)
